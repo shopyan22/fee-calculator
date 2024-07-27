@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hitung Persentase Fee</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    .container {
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    button {
+        padding: 10px 20px;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    button.calculate {
+        background-color: #007bff;
+    }
+    button.calculate:hover {
+        background-color: #0056b3;
+    }
+    button.reset {
+        background-color: #dc3545;
+    }
+    button.reset:hover {
+        background-color: #cc0000;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Hitung Persentase Fee</h2>
+    <input type="number" id="transactionAmount" placeholder="Masukkan jumlah transaksi">
+    <input type="number" id="feeAmount" placeholder="Masukkan jumlah fee">
+    <button class="calculate" onclick="calculateFeePercentage()">Hitung Persentase Fee</button>
+    <button class="reset" onclick="resetForm()">Reset</button>
+    <p id="result"></p>
+</div>
+
+<script>
+    function calculateFeePercentage() {
+        const transactionAmount = parseFloat(document.getElementById('transactionAmount').value);
+        const feeAmount = parseFloat(document.getElementById('feeAmount').value);
+
+        const feePercentage = (feeAmount / transactionAmount) * 100;
+
+        document.getElementById('result').innerText = `Persentase fee dari transaksi adalah: ${feePercentage.toFixed(2)}%`;
+    }
+
+    function resetForm() {
+        document.getElementById('transactionAmount').value = '';
+        document.getElementById('feeAmount').value = '';
+        document.getElementById('result').innerText = '';
+    }
+</script>
+</body>
+</html>
