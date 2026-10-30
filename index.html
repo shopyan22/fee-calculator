@@ -1,44 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hitung Persentase Fee</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-    }
-    .container {
-        max-width: 300px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-    }
-    button {
-        padding: 10px 20px;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        margin-right: 10px;
-    }
-    button.calculate {
-        background-color: #007bff;
-    }
-    button.calculate:hover {
-        background-color: #0056b3;
-    }
-    button.reset {
-        background-color: #dc3545;
-    }
-    button.reset:hover {
-        background-color: #cc0000;
-    }
+:root {
+    --bg: #0e1220;
+    --bg-glow: #1a2147;
+    --surface: #171c30;
+    --field: #0f1426;
+    --border: #2a3152;
+    --text: #e8ebf7;
+    --muted: #8b93b5;
+    --accent: #6c7cff;
+    --accent-hover: #8795ff;
+    --result: #3ddbb0;
+    --danger: #ff6b81;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    color: var(--text);
+    text-align: center;
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(900px 500px at 50% -10%, var(--bg-glow), transparent 70%),
+        var(--bg);
+}
+
+.container {
+    max-width: 360px;
+    margin: 60px auto;
+    padding: 28px 24px 24px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    margin: 0 0 22px;
+}
+
+input {
+    width: 100%;
+    padding: 11px 12px;
+    margin-bottom: 14px;
+    font-size: 1rem;
+    color: var(--text);
+    background-color: var(--field);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder { color: var(--muted); }
+
+input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(108, 124, 255, 0.25);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+button {
+    padding: 11px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+button:focus-visible {
+    outline: 2px solid var(--accent-hover);
+    outline-offset: 2px;
+}
+
+button.calculate {
+    flex: 2;
+    background-color: var(--accent);
+    color: #0b0f24;
+    border: 1px solid var(--accent);
+}
+
+button.calculate:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+button.reset {
+    flex: 1;
+    background-color: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+button.reset:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+#result {
+    margin: 20px 0 0;
+    padding: 14px;
+    min-height: 52px;
+    font-size: 1rem;
+    color: var(--muted);
+    background-color: var(--field);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+#result.ok { color: var(--result); border-color: rgba(61, 219, 176, 0.4); }
 </style>
 </head>
 <body>
@@ -46,8 +132,10 @@
     <h2>Hitung Persentase Fee</h2>
     <input type="number" id="transactionAmount" placeholder="Masukkan jumlah transaksi">
     <input type="number" id="feeAmount" placeholder="Masukkan jumlah fee">
-    <button class="calculate" onclick="calculateFeePercentage()">Hitung Persentase Fee</button>
-    <button class="reset" onclick="resetForm()">Reset</button>
+    <div class="actions">
+        <button class="calculate" onclick="calculateFeePercentage()">Hitung Persentase Fee</button>
+        <button class="reset" onclick="resetForm()">Reset</button>
+    </div>
     <p id="result"></p>
 </div>
 
@@ -55,16 +143,27 @@
     function calculateFeePercentage() {
         const transactionAmount = parseFloat(document.getElementById('transactionAmount').value);
         const feeAmount = parseFloat(document.getElementById('feeAmount').value);
+        const result = document.getElementById('result');
+
+        result.className = '';
+
+        if (isNaN(transactionAmount) || isNaN(feeAmount) || transactionAmount === 0) {
+            result.innerText = 'Isi jumlah transaksi (bukan 0) dan jumlah fee.';
+            return;
+        }
 
         const feePercentage = (feeAmount / transactionAmount) * 100;
 
-        document.getElementById('result').innerText = `Persentase fee dari transaksi adalah: ${feePercentage.toFixed(2)}%`;
+        result.innerText = `Persentase fee dari transaksi adalah: ${feePercentage.toFixed(2)}%`;
+        result.classList.add('ok');
     }
 
     function resetForm() {
         document.getElementById('transactionAmount').value = '';
         document.getElementById('feeAmount').value = '';
-        document.getElementById('result').innerText = '';
+        const result = document.getElementById('result');
+        result.innerText = '';
+        result.className = '';
     }
 </script>
 </body>
